@@ -4,26 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volejbols Latgalē</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        p {
-            text-align: center;
-            font-size: 1.2em;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <h1>Laipni lūdzam Volejbols Latgalē!</h1>
-    <p>Šeit varat atrast informāciju par volejbolu Latgalē.</p>
-    <!-- Add your content here -->
+<body class="main-page">
+    <div class="page-wrapper">
+        <h1>Volejbols Latgalē</h1>
+        <div class="button-row">
+            <button type="button" onclick="showInfo('VPL')">VPL</button>
+            <button type="button" onclick="showInfo('VDL')">VDL</button>
+            <button type="button" onclick="showInfo('SVL Vīrieši')">SVL Vīrieši</button>
+            <button type="button" onclick="showInfo('SVL Sievietes')">SVL Sievietes</button>
+            <button type="button" onclick="showInfo('RJVL Zēni')">RJVL Zēni</button>
+            <button type="button" onclick="showInfo('RJVL Meitenes')">RJVL Meitenes</button>
+        </div>
+        <div class="content-area">
+            <div class="info-card">
+                <div class="info-image-card">
+                    <img id="infoImage" src="" alt="" onerror="hideBrokenImage()" />
+                    <div id="imageFallback" class="image-fallback">Nav attēla. Pievienojiet attēlu mapē <code>atteli/</code> ar atbilstošu nosaukumu.</div>
+                </div>
+                <div class="info-copy">
+                    <h2 id="infoTitle">Izvēlieties sadaļu</h2>
+                    <div class="info-description" id="infoDescription">Nospiediet vienu no pogām, lai redzētu šo sadaļu šeit.</div>
+                </div>
+            </div>
+            <div class="editor-card">
+                <label for="infoInput">Jūsu teksts</label>
+                <textarea id="infoInput" rows="6" placeholder="Ievadiet savu tekstu šeit..." oninput="updateTextPreview()"></textarea>
+                <div class="preview-box">
+                    <h3>Priekšskatījums</h3>
+                    <p id="previewText">Jūsu ievadītais teksts tiks parādīts šeit.</p>
+                </div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+    </div>
+    <script>
+        const infoData = {
+            "VPL": { img: "atteli/vpl.png", alt: "VPL attēls", description: "Informācija par VPL." },
+            "VDL": { img: "atteli/vdl.png", alt: "VDL attēls", description: "Informācija par VDL." },
+            "SVL Vīrieši": { img: "atteli/svl-viriesi.png", alt: "SVL Vīrieši attēls", description: "Informācija par SVL Vīrieši." },
+            "SVL Sievietes": { img: "atteli/svl-sievietes.png", alt: "SVL Sievietes attēls", description: "Informācija par SVL Sievietes." },
+            "RJVL Zēni": { img: "atteli/rjvl-zeeni.png", alt: "RJVL Zēni attēls", description: "Informācija par RJVL Zēni." },
+            "RJVL Meitenes": { img: "atteli/rjvl-meitenes.png", alt: "RJVL Meitenes attēls", description: "Informācija par RJVL Meitenes." }
+        };
+
+        const customText = {};
+        let currentKey = null;
+
+        function hideBrokenImage() {
+            const image = document.getElementById('infoImage');
+            image.style.display = 'none';
+            document.getElementById('imageFallback').style.display = 'flex';
+        }
+
+        function showInfo(key) {
+            if (currentKey) {
+                customText[currentKey] = document.getElementById('infoInput').value;
+            }
+            currentKey = key;
+            const info = infoData[key];
+            const image = document.getElementById('infoImage');
+            image.src = info.img;
+            image.alt = info.alt;
+            image.style.display = 'block';
+            document.getElementById('imageFallback').style.display = 'none';
+            document.getElementById('infoTitle').textContent = key;
+            document.getElementById('infoDescription').textContent = info.description;
+            document.getElementById('infoInput').value = customText[key] || '';
+            updateTextPreview();
+        }
+
+        function updateTextPreview() {
+            const text = document.getElementById('infoInput').value.trim();
+            document.getElementById('previewText').textContent = text || 'Jūsu ievadītais teksts tiks parādīts šeit.';
+        }
+    </script>
 </body>
 </html>
