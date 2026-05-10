@@ -28,14 +28,6 @@
                     <div class="info-description" id="infoDescription">Nospiediet vienu no pogām, lai redzētu šo sadaļu šeit.</div>
                 </div>
             </div>
-            <div class="editor-card">
-                <label for="infoInput">Jūsu teksts</label>
-                <textarea id="infoInput" rows="6" placeholder="Ievadiet savu tekstu šeit..." oninput="updateTextPreview()"></textarea>
-                <div class="preview-box">
-                    <h3>Priekšskatījums</h3>
-                    <p id="previewText">Jūsu ievadītais teksts tiks parādīts šeit.</p>
-                </div>
-            </div>
         </div>
         <div class="spacer"></div>
     </div>
@@ -49,9 +41,6 @@
             "RJVL Meitenes": { img: "atteli/rjvl-meitenes.png", alt: "RJVL Meitenes attēls", description: "Informācija par RJVL Meitenes." }
         };
 
-        const customText = {};
-        let currentKey = null;
-
         function hideBrokenImage() {
             const image = document.getElementById('infoImage');
             image.style.display = 'none';
@@ -59,10 +48,6 @@
         }
 
         function showInfo(key) {
-            if (currentKey) {
-                customText[currentKey] = document.getElementById('infoInput').value;
-            }
-            currentKey = key;
             const info = infoData[key];
             const image = document.getElementById('infoImage');
             image.src = info.img;
@@ -71,13 +56,6 @@
             document.getElementById('imageFallback').style.display = 'none';
             document.getElementById('infoTitle').textContent = key;
             document.getElementById('infoDescription').textContent = info.description;
-            document.getElementById('infoInput').value = customText[key] || '';
-            updateTextPreview();
-        }
-
-        function updateTextPreview() {
-            const text = document.getElementById('infoInput').value.trim();
-            document.getElementById('previewText').textContent = text || 'Jūsu ievadītais teksts tiks parādīts šeit.';
         }
     </script>
 </body>
