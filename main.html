@@ -45,11 +45,6 @@
 
         function showInfo(key) {
             const info = infoData[key];
-            const image = document.getElementById('infoImage');
-            image.src = info.img;
-            image.alt = info.alt;
-            image.style.display = 'block';
-            document.getElementById('imageFallback').style.display = 'none';
             document.getElementById('infoTitle').textContent = key;
             document.getElementById('infoDescription').textContent = info.description;
         }
