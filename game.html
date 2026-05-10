@@ -305,59 +305,168 @@
         }
 
         function draw() {
-            // Clear canvas with sky gradient
-            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#87CEEB');
-            gradient.addColorStop(1, '#E0F6FF');
-            ctx.fillStyle = gradient;
+            // Clear canvas with gradient background (sky and ground)
+            const gradientBg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradientBg.addColorStop(0, '#87CEEB');
+            gradientBg.addColorStop(0.4, '#E0F6FF');
+            gradientBg.addColorStop(0.4, '#D4A574');
+            gradientBg.addColorStop(1, '#C19A6B');
+            ctx.fillStyle = gradientBg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw net
+            // Draw court background - two sides
+            const courtTop = canvas.height / 2 - 80;
+            const courtBottom = canvas.height / 2 + 80;
+            
+            // NPC Court (top side)
+            ctx.fillStyle = 'rgba(200, 100, 100, 0.3)';
+            ctx.fillRect(0, courtTop, canvas.width, 80);
+            
+            // Player Court (bottom side)
+            ctx.fillStyle = 'rgba(100, 150, 200, 0.3)';
+            ctx.fillRect(0, courtBottom, canvas.width, 80);
+
+            // Draw court boundary lines
             ctx.strokeStyle = '#FFFFFF';
             ctx.lineWidth = 3;
-            ctx.setLineDash([10, 10]);
+            
+            // Top court border
             ctx.beginPath();
-            ctx.moveTo(0, net.y);
-            ctx.lineTo(canvas.width, net.y);
+            ctx.moveTo(0, courtTop);
+            ctx.lineTo(canvas.width, courtTop);
             ctx.stroke();
-            ctx.setLineDash([]);
-
-            // Draw court lines
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-            ctx.lineWidth = 2;
+            
+            // Bottom court border
             ctx.beginPath();
-            ctx.moveTo(0, canvas.height / 4);
-            ctx.lineTo(canvas.width, canvas.height / 4);
+            ctx.moveTo(0, courtBottom);
+            ctx.lineTo(canvas.width, courtBottom);
             ctx.stroke();
-
+            
+            // Side lines
             ctx.beginPath();
-            ctx.moveTo(0, (canvas.height * 3) / 4);
-            ctx.lineTo(canvas.width, (canvas.height * 3) / 4);
+            ctx.moveTo(20, courtTop);
+            ctx.lineTo(20, courtBottom);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(canvas.width - 20, courtTop);
+            ctx.lineTo(canvas.width - 20, courtBottom);
             ctx.stroke();
 
-            // Draw center line
+            // Draw attack lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.lineWidth = 1;
             ctx.setLineDash([5, 5]);
+            
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.moveTo(0, canvas.height / 2 - 40);
+            ctx.lineTo(canvas.width, canvas.height / 2 - 40);
             ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2 + 40);
+            ctx.lineTo(canvas.width, canvas.height / 2 + 40);
+            ctx.stroke();
+            
             ctx.setLineDash([]);
 
-            // Draw computer paddle
+            // Draw volleyball net - more realistic with mesh
+            const netX = canvas.width / 2;
+            const netTopY = canvas.height / 2 - 100;
+            const netBottomY = canvas.height / 2 + 100;
+            const netWidth = 15;
+            
+            // Net poles
+            ctx.fillStyle = '#333333';
+            ctx.fillRect(netX - netWidth / 2 - 8, netTopY - 30, 8, 130);
+            ctx.fillRect(netX + netWidth / 2, netTopY - 30, 8, 130);
+            
+            // Net top rope
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(netX - netWidth / 2 - 8, netTopY);
+            ctx.lineTo(netX + netWidth / 2 + 8, netTopY);
+            ctx.stroke();
+            
+            // Net bottom rope
+            ctx.beginPath();
+            ctx.moveTo(netX - netWidth / 2 - 8, netBottomY);
+            ctx.lineTo(netX + netWidth / 2 + 8, netBottomY);
+            ctx.stroke();
+            
+            // Net mesh pattern
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 1.5;
+            
+            // Vertical lines of net
+            for (let i = 0; i <= 12; i++) {
+                const xPos = (netX - netWidth / 2 - 5) + (i * 12);
+                ctx.beginPath();
+                ctx.moveTo(xPos, netTopY);
+                ctx.lineTo(xPos, netBottomY);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines of net (diagonal mesh effect)
+            for (let i = 0; i <= 12; i++) {
+                const yPos = netTopY + (i * 16);
+                ctx.beginPath();
+                ctx.moveTo(netX - netWidth / 2 - 5, yPos);
+                ctx.lineTo(netX + netWidth / 2 + 5, yPos);
+                ctx.stroke();
+            }
+            
+            // Diagonal lines for mesh pattern
+            for (let i = -5; i <= 20; i++) {
+                ctx.beginPath();
+                ctx.moveTo(netX - netWidth / 2 - 5 + i * 6, netTopY);
+                ctx.lineTo(netX - netWidth / 2 - 5 + i * 6 + 120, netBottomY);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(netX - netWidth / 2 - 5 + i * 6, netTopY);
+                ctx.lineTo(netX - netWidth / 2 - 5 + i * 6 - 120, netBottomY);
+                ctx.stroke();
+            }
+
+            // Draw computer paddle (NPC on top side)
             ctx.fillStyle = '#FF6B6B';
             ctx.fillRect(computer.x, computer.y, computer.width, computer.height);
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 5;
             ctx.strokeStyle = '#C92A2A';
             ctx.lineWidth = 2;
             ctx.strokeRect(computer.x, computer.y, computer.width, computer.height);
+            
+            // Add player label on NPC paddle
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('NPC', computer.x + computer.width / 2, computer.y + computer.height / 2 + 3);
+            ctx.shadowColor = 'transparent';
 
-            // Draw player paddle
+            // Draw player paddle (player on bottom side)
             ctx.fillStyle = '#4ECDC4';
             ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 5;
             ctx.strokeStyle = '#1A9B99';
             ctx.lineWidth = 2;
             ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
+            
+            // Add player label on player paddle
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('JŪNEBAS', paddle.x + paddle.width / 2, paddle.y + paddle.height / 2 + 3);
+            ctx.shadowColor = 'transparent';
 
-            // Draw ball with gradient
+            // Draw ball with gradient and shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetY = 2;
+            
             const ballGradient = ctx.createRadialGradient(ball.x - 4, ball.y - 4, 2, ball.x, ball.y, ball.radius);
             ballGradient.addColorStop(0, '#FFE66D');
             ballGradient.addColorStop(1, '#FFA500');
@@ -368,10 +477,19 @@
 
             // Draw ball stitches (volleyball detail)
             ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius - 3, 0, Math.PI * 2);
             ctx.stroke();
+            
+            // Draw curved stitches for volleyball pattern
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y - 3, 5, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            ctx.shadowColor = 'transparent';
 
             // Draw starting instruction
             if (!gameStarted) {
@@ -380,9 +498,9 @@
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = 'bold 36px Arial';
                 ctx.textAlign = 'center';
-                ctx.fillText('Klikšķis lai sāktu', canvas.width / 2, canvas.height / 2);
+                ctx.fillText('Klikšķis lai sāktu', canvas.width / 2, canvas.height / 2 - 20);
                 ctx.font = '20px Arial';
-                ctx.fillText('Pārvietojiet peli lai vadītu raketi', canvas.width / 2, canvas.height / 2 + 50);
+                ctx.fillText('🖱️ Pārvietojiet peli lai vadītu raketi', canvas.width / 2, canvas.height / 2 + 40);
             }
         }
 
