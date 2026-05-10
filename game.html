@@ -85,13 +85,33 @@
 
         .net-line {
             grid-column: 1 / -1;
-            grid-row: 2;
+            grid-row: 1;
             border-top: 4px solid #FFFFFF;
             border-bottom: 4px solid #FFFFFF;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);
             position: relative;
             z-index: 5;
-            height: 20px;
+            height: 18px;
+        }
+
+        .zone-4, .zone-3, .zone-2 {
+            grid-row: 2;
+        }
+
+        .zone-5, .zone-6, .zone-1 {
+            grid-row: 3;
+        }
+
+        .zone-4, .zone-5 {
+            grid-column: 1;
+        }
+
+        .zone-3, .zone-6 {
+            grid-column: 2;
+        }
+
+        .zone-2, .zone-1 {
+            grid-column: 3;
         }
 
         .zone {
@@ -260,23 +280,23 @@
             }
         }
 
-        .zone-6, .zone-1, .zone-2 {
-            grid-row: 1;
+        .zone-4, .zone-3, .zone-2 {
+            grid-row: 2;
         }
 
-        .zone-5, .zone-4, .zone-3 {
+        .zone-5, .zone-6, .zone-1 {
             grid-row: 3;
         }
 
-        .zone-6, .zone-5 {
+        .zone-4, .zone-5 {
             grid-column: 1;
         }
 
-        .zone-1, .zone-4 {
+        .zone-3, .zone-6 {
             grid-column: 2;
         }
 
-        .zone-2, .zone-3 {
+        .zone-2, .zone-1 {
             grid-column: 3;
         }
     </style>
@@ -285,21 +305,21 @@
     <div class="game-container">
         <h1>🏐 Volejbola Pozīciju Spēle</h1>
         <div class="info-text">
-            Saskaņojiet volejbolista pozīciju ar pareizo zonu uz laukuma!<br>
-            Klikšķiniet uz pozīcijas pogas un pēc tam uz zonu, kur viņš jānovieto.
+            Šajā spēlē visi seši laukuma sektori ir vienā pusē aiz tīkla.<br>
+            Klikšķiniet uz pozīcijas pogas un pēc tam uz pareizo zonu uz laukuma.
         </div>
 
         <div class="content-wrapper">
             <div class="court-section">
                 <div class="court-title">Volejbola Laukums</div>
                 <div class="volleyball-court" id="court">
-                    <div class="zone zone-6" data-zone="6">
-                        <div class="zone-label">6</div>
-                        <div class="zone-position">Aizmugure Centrs</div>
+                        <div class="zone zone-4" data-zone="4">
+                        <div class="zone-label">4</div>
+                        <div class="zone-position">Priekšā Kreisā</div>
                     </div>
-                    <div class="zone zone-1" data-zone="1">
-                        <div class="zone-label">1</div>
-                        <div class="zone-position">Aizmugure Labā</div>
+                    <div class="zone zone-3" data-zone="3">
+                        <div class="zone-label">3</div>
+                        <div class="zone-position">Priekšā Centrs</div>
                     </div>
                     <div class="zone zone-2" data-zone="2">
                         <div class="zone-label">2</div>
@@ -309,13 +329,13 @@
                         <div class="zone-label">5</div>
                         <div class="zone-position">Aizmugure Kreisā</div>
                     </div>
-                    <div class="zone zone-4" data-zone="4">
-                        <div class="zone-label">4</div>
-                        <div class="zone-position">Priekšā Kreisā</div>
+                    <div class="zone zone-6" data-zone="6">
+                        <div class="zone-label">6</div>
+                        <div class="zone-position">Aizmugure Centrs</div>
                     </div>
-                    <div class="zone zone-3" data-zone="3">
-                        <div class="zone-label">3</div>
-                        <div class="zone-position">Priekšā Centrs</div>
+                    <div class="zone zone-1" data-zone="1">
+                        <div class="zone-label">1</div>
+                        <div class="zone-position">Aizmugure Labā</div>
                     </div>
                     <div class="net-line"></div>
                 </div>
