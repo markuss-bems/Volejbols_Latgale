@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volejbola Spēle - Volleyball Game</title>
+    <title>Volejbola Pozīciju Spēle - Volleyball Positions Game</title>
     <style>
         * {
             margin: 0;
@@ -18,6 +18,7 @@
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
         }
 
         .game-container {
@@ -25,62 +26,201 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
         }
 
         h1 {
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-size: 2.5em;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: 2em;
             margin-bottom: 10px;
         }
 
-        .controls-info {
-            color: white;
+        .info-text {
+            color: #666;
             font-size: 1.1em;
             text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px 30px;
-            border-radius: 10px;
-            max-width: 600px;
+            margin-bottom: 15px;
         }
 
-        #gameCanvas {
-            border: 3px solid white;
-            background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
-            cursor: none;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-        }
-
-        .stats {
+        .content-wrapper {
             display: flex;
             gap: 40px;
-            color: white;
-            font-size: 1.5em;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .court-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .court-title {
             font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+        }
+
+        .volleyball-court {
+            border: 3px solid #333;
+            background: linear-gradient(180deg, #d4af37 0%, #f4e4c1 100%);
+            position: relative;
+            width: 300px;
+            height: 500px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 3px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .net-line {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            border-top: 4px solid #FFFFFF;
+            border-bottom: 4px solid #FFFFFF;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%);
+            position: relative;
+            z-index: 5;
+            height: 20px;
+        }
+
+        .zone {
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zone:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.98);
+        }
+
+        .zone.active {
+            background: rgba(255, 200, 0, 0.6);
+            box-shadow: inset 0 0 15px rgba(255, 200, 0, 0.8), 0 0 15px rgba(255, 200, 0, 0.6);
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .zone-label {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #333;
+            z-index: 2;
+        }
+
+        .zone-position {
+            font-size: 0.75em;
+            color: #666;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .buttons-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 300px;
+        }
+
+        .buttons-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .position-button {
+            padding: 15px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #667eea;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .position-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .position-button:active {
+            transform: translateY(0);
+        }
+
+        .position-button.matched {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .stats-section {
+            text-align: center;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px 30px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            min-width: 300px;
         }
 
         .stat-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin: 8px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
         }
 
-        .stat-label {
-            font-size: 0.7em;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .button-row {
+        .control-buttons {
             display: flex;
             gap: 15px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        button {
+        button.control-btn {
             padding: 12px 30px;
             font-size: 1em;
             background-color: #FFE656;
@@ -92,426 +232,240 @@
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
+        button.control-btn:hover {
             background-color: #FFED4E;
         }
 
-        button:active {
+        button.control-btn:active {
             transform: scale(0.98);
+        }
+
+        .completion-message {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: center;
+            margin-top: 15px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .zone-6, .zone-1, .zone-2 {
+            grid-row: 1;
+        }
+
+        .zone-5, .zone-4, .zone-3 {
+            grid-row: 3;
+        }
+
+        .zone-6, .zone-5 {
+            grid-column: 1;
+        }
+
+        .zone-1, .zone-4 {
+            grid-column: 2;
+        }
+
+        .zone-2, .zone-3 {
+            grid-column: 3;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1>⚽ Volejbola Spēle 🏐</h1>
-        <div class="controls-info">
-            <strong>Vadības:</strong><br>
-            🖱️ Pārvietojiet peli lai vadītu raketi<br>
-            🖱️ Klikšķis lai sāktu spēli
+        <h1>🏐 Volejbola Pozīciju Spēle</h1>
+        <div class="info-text">
+            Saskaņojiet volejbolista pozīciju ar pareizo zonu uz laukuma!<br>
+            Klikšķiniet uz pozīcijas pogas un pēc tam uz zonu, kur viņš jānovieto.
         </div>
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-label">Jūsu Punkti</div>
-                <div id="playerScore">0</div>
+
+        <div class="content-wrapper">
+            <div class="court-section">
+                <div class="court-title">Volejbola Laukums</div>
+                <div class="volleyball-court" id="court">
+                    <div class="zone zone-6" data-zone="6">
+                        <div class="zone-label">6</div>
+                        <div class="zone-position">Aizmugure Centrs</div>
+                    </div>
+                    <div class="zone zone-1" data-zone="1">
+                        <div class="zone-label">1</div>
+                        <div class="zone-position">Aizmugure Labā</div>
+                    </div>
+                    <div class="zone zone-2" data-zone="2">
+                        <div class="zone-label">2</div>
+                        <div class="zone-position">Priekšā Labā</div>
+                    </div>
+                    <div class="zone zone-5" data-zone="5">
+                        <div class="zone-label">5</div>
+                        <div class="zone-position">Aizmugure Kreisā</div>
+                    </div>
+                    <div class="zone zone-4" data-zone="4">
+                        <div class="zone-label">4</div>
+                        <div class="zone-position">Priekšā Kreisā</div>
+                    </div>
+                    <div class="zone zone-3" data-zone="3">
+                        <div class="zone-label">3</div>
+                        <div class="zone-position">Priekšā Centrs</div>
+                    </div>
+                    <div class="net-line"></div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-label">Dators</div>
-                <div id="computerScore">0</div>
+
+            <div class="buttons-section">
+                <div class="buttons-title">Pozīcijas</div>
+                <div class="buttons-grid" id="buttonsGrid">
+                    <!-- Buttons will be generated here -->
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <span>Pareizi:</span>
+                        <span id="correct">0/6</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Kļūdas:</span>
+                        <span id="errors">0</span>
+                    </div>
+                    <div id="completionMessage"></div>
+
+                    <div class="control-buttons">
+                        <button class="control-btn" onclick="resetGame()">Sākt no Jauna</button>
+                        <button class="control-btn" onclick="window.history.back()">Atpakaļ</button>
+                    </div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-label">Sitieni</div>
-                <div id="hitCount">0</div>
-            </div>
-        </div>
-        <div class="button-row">
-            <button onclick="restartGame()">Sākt Jaunu Spēli</button>
-            <button onclick="window.history.back()">Atpakaļ</button>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const positions = [
+            { name: "Setter\n(Uzbāzējs)", zone: 6, id: 'setter' },
+            { name: "Outside Hitter\n(Ārējais)", zone: 2, id: 'outside1' },
+            { name: "Middle Blocker\n(Vidus Blokieris)", zone: 3, id: 'middle' },
+            { name: "Opposite Hitter\n(Pretējais)", zone: 4, id: 'opposite' },
+            { name: "Outside Hitter\n(Ārējais)", zone: 5, id: 'outside2' },
+            { name: "Libero\n(Libero)", zone: 1, id: 'libero' }
+        ];
 
-        // Game objects
-        const ball = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            radius: 12,
-            vx: 0,
-            vy: 0,
-            speed: 5
-        };
+        let selectedPosition = null;
+        let matchedPositions = new Set();
+        let errors = 0;
 
-        const paddle = {
-            x: canvas.width / 2 - 50,
-            y: canvas.height - 30,
-            width: 100,
-            height: 15,
-            speed: 7
-        };
+        function initGame() {
+            const buttonsGrid = document.getElementById('buttonsGrid');
+            buttonsGrid.innerHTML = '';
 
-        const computer = {
-            x: canvas.width / 2 - 50,
-            y: 20,
-            width: 100,
-            height: 15,
-            speed: 4
-        };
+            positions.forEach(pos => {
+                const button = document.createElement('button');
+                button.className = 'position-button';
+                button.textContent = pos.name;
+                button.dataset.id = pos.id;
+                button.onclick = (e) => selectPosition(pos, e.target);
+                buttonsGrid.appendChild(button);
+            });
 
-        const net = {
-            x: canvas.width / 2,
-            y: canvas.height / 2
-        };
+            const zoneElements = document.querySelectorAll('.zone');
+            zoneElements.forEach(zone => {
+                zone.onclick = () => placePosition(parseInt(zone.dataset.zone));
+            });
 
-        let playerScore = 0;
-        let computerScore = 0;
-        let hitCount = 0;
-        let gameStarted = false;
-        let mouseX = canvas.width / 2;
-        let ballLastHitBy = null; // Track who last hit the ball
-
-        // Event listeners
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouseX = e.clientX - rect.left;
-        });
-
-        canvas.addEventListener('click', () => {
-            if (!gameStarted) {
-                startGame();
-            }
-        });
-
-        function startGame() {
-            gameStarted = true;
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 4;
-            ball.vx = (Math.random() - 0.5) * 6;
-            ball.vy = 5;
-        }
-
-        function restartGame() {
-            playerScore = 0;
-            computerScore = 0;
-            hitCount = 0;
-            gameStarted = false;
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
-            ball.vx = 0;
-            ball.vy = 0;
-            ballLastHitBy = null;
             updateScore();
         }
 
+        function selectPosition(pos, button) {
+            if (matchedPositions.has(pos.id)) return;
+
+            document.querySelectorAll('.position-button').forEach(b => {
+                b.style.background = '';
+                b.style.color = '';
+            });
+
+            if (selectedPosition === pos.id) {
+                selectedPosition = null;
+            } else {
+                selectedPosition = pos.id;
+                button.style.background = '#667eea';
+                button.style.color = 'white';
+            }
+        }
+
+        function placePosition(zoneNumber) {
+            if (!selectedPosition) return;
+
+            const position = positions.find(p => p.id === selectedPosition);
+            if (!position) return;
+
+            if (position.zone === zoneNumber) {
+                // Correct placement
+                matchedPositions.add(selectedPosition);
+                const zone = document.querySelector(`[data-zone="${zoneNumber}"]`);
+                zone.classList.add('active');
+                zone.style.pointerEvents = 'none';
+
+                const button = document.querySelector(`[data-id="${selectedPosition}"]`);
+                button.classList.add('matched');
+
+                selectedPosition = null;
+                document.querySelectorAll('.position-button').forEach(b => {
+                    b.style.background = '';
+                    b.style.color = '';
+                });
+
+                updateScore();
+            } else {
+                // Wrong placement
+                errors++;
+                const zone = document.querySelector(`[data-zone="${zoneNumber}"]`);
+                zone.style.background = 'rgba(255, 0, 0, 0.3)';
+                setTimeout(() => {
+                    zone.style.background = 'rgba(255, 255, 255, 0.2)';
+                }, 500);
+                updateScore();
+            }
+        }
+
         function updateScore() {
-            document.getElementById('playerScore').textContent = playerScore;
-            document.getElementById('computerScore').textContent = computerScore;
-            document.getElementById('hitCount').textContent = hitCount;
-        }
+            document.getElementById('correct').textContent = `${matchedPositions.size}/6`;
+            document.getElementById('errors').textContent = errors;
 
-        function update() {
-            if (!gameStarted) return;
-
-            // Update ball position
-            ball.x += ball.vx;
-            ball.y += ball.vy;
-            ball.vy += 0.3; // Gravity
-
-            // Ball collision with walls
-            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
-                ball.vx *= -0.95;
-                ball.x = Math.max(ball.radius, Math.min(canvas.width - ball.radius, ball.x));
-            }
-
-            // Ball collision with top/bottom
-            if (ball.y - ball.radius < 0) {
-                ball.y = ball.radius;
-                ball.vy *= -0.8;
-            }
-
-            if (ball.y + ball.radius > canvas.height) {
-                // Ball went past player paddle
-                computerScore++;
-                ballLastHitBy = null;
-                resetBall();
-                updateScore();
-                return;
-            }
-
-            // Player paddle movement
-            paddle.x = mouseX - paddle.width / 2;
-            paddle.x = Math.max(0, Math.min(canvas.width - paddle.width, paddle.x));
-
-            // Ball collision with player paddle
-            if (
-                ball.y + ball.radius > paddle.y &&
-                ball.y - ball.radius < paddle.y + paddle.height &&
-                ball.x > paddle.x &&
-                ball.x < paddle.x + paddle.width &&
-                ballLastHitBy !== 'player'
-            ) {
-                ball.vy = -Math.abs(ball.vy) * 0.9;
-                ball.vx += (ball.x - (paddle.x + paddle.width / 2)) * 0.1;
-                hitCount++;
-                ballLastHitBy = 'player';
-            }
-
-            // Computer AI
-            const computerTarget = ball.x;
-            if (computerTarget < computer.x + computer.width / 2 - 10) {
-                computer.x -= computer.speed;
-            } else if (computerTarget > computer.x + computer.width / 2 + 10) {
-                computer.x += computer.speed;
-            }
-            computer.x = Math.max(0, Math.min(canvas.width - computer.width, computer.x));
-
-            // Ball collision with computer paddle
-            if (
-                ball.y - ball.radius < computer.y + computer.height &&
-                ball.y + ball.radius > computer.y &&
-                ball.x > computer.x &&
-                ball.x < computer.x + computer.width &&
-                ballLastHitBy !== 'computer'
-            ) {
-                ball.vy = Math.abs(ball.vy) * 0.9;
-                ball.vx += (ball.x - (computer.x + computer.width / 2)) * 0.1;
-                ballLastHitBy = 'computer';
-            }
-
-            // Ball went past computer paddle
-            if (ball.y - ball.radius < 0) {
-                playerScore++;
-                ballLastHitBy = null;
-                resetBall();
-                updateScore();
-            }
-
-            // Speed limit
-            const maxSpeed = 12;
-            const speed = Math.sqrt(ball.vx ** 2 + ball.vy ** 2);
-            if (speed > maxSpeed) {
-                ball.vx = (ball.vx / speed) * maxSpeed;
-                ball.vy = (ball.vy / speed) * maxSpeed;
+            if (matchedPositions.size === 6) {
+                const message = document.getElementById('completionMessage');
+                message.classList.remove('completion-message');
+                message.innerHTML = '✨ Lielisks! Visas pozīcijas ir pareizas! ✨';
+                message.classList.add('completion-message');
             }
         }
 
-        function resetBall() {
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
-            ball.vx = (Math.random() - 0.5) * 4;
-            ball.vy = -3;
+        function resetGame() {
+            selectedPosition = null;
+            matchedPositions.clear();
+            errors = 0;
+            document.querySelectorAll('.zone').forEach(zone => {
+                zone.classList.remove('active');
+                zone.style.background = 'rgba(255, 255, 255, 0.2)';
+                zone.style.pointerEvents = 'auto';
+            });
+            document.querySelectorAll('.position-button').forEach(b => {
+                b.classList.remove('matched');
+                b.style.background = '';
+                b.style.color = '';
+            });
+            document.getElementById('completionMessage').innerHTML = '';
+            updateScore();
         }
 
-        function draw() {
-            // Clear canvas with gradient background (sky and ground)
-            const gradientBg = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradientBg.addColorStop(0, '#87CEEB');
-            gradientBg.addColorStop(0.4, '#E0F6FF');
-            gradientBg.addColorStop(0.4, '#D4A574');
-            gradientBg.addColorStop(1, '#C19A6B');
-            ctx.fillStyle = gradientBg;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw court background - two sides
-            const courtTop = canvas.height / 2 - 80;
-            const courtBottom = canvas.height / 2 + 80;
-            
-            // NPC Court (top side)
-            ctx.fillStyle = 'rgba(200, 100, 100, 0.3)';
-            ctx.fillRect(0, courtTop, canvas.width, 80);
-            
-            // Player Court (bottom side)
-            ctx.fillStyle = 'rgba(100, 150, 200, 0.3)';
-            ctx.fillRect(0, courtBottom, canvas.width, 80);
-
-            // Draw court boundary lines
-            ctx.strokeStyle = '#FFFFFF';
-            ctx.lineWidth = 3;
-            
-            // Top court border
-            ctx.beginPath();
-            ctx.moveTo(0, courtTop);
-            ctx.lineTo(canvas.width, courtTop);
-            ctx.stroke();
-            
-            // Bottom court border
-            ctx.beginPath();
-            ctx.moveTo(0, courtBottom);
-            ctx.lineTo(canvas.width, courtBottom);
-            ctx.stroke();
-            
-            // Side lines
-            ctx.beginPath();
-            ctx.moveTo(20, courtTop);
-            ctx.lineTo(20, courtBottom);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(canvas.width - 20, courtTop);
-            ctx.lineTo(canvas.width - 20, courtBottom);
-            ctx.stroke();
-
-            // Draw attack lines
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.lineWidth = 1;
-            ctx.setLineDash([5, 5]);
-            
-            ctx.beginPath();
-            ctx.moveTo(0, canvas.height / 2 - 40);
-            ctx.lineTo(canvas.width, canvas.height / 2 - 40);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(0, canvas.height / 2 + 40);
-            ctx.lineTo(canvas.width, canvas.height / 2 + 40);
-            ctx.stroke();
-            
-            ctx.setLineDash([]);
-
-            // Draw volleyball net - more realistic with mesh
-            const netX = canvas.width / 2;
-            const netTopY = canvas.height / 2 - 100;
-            const netBottomY = canvas.height / 2 + 100;
-            const netWidth = 15;
-            
-            // Net poles
-            ctx.fillStyle = '#333333';
-            ctx.fillRect(netX - netWidth / 2 - 8, netTopY - 30, 8, 130);
-            ctx.fillRect(netX + netWidth / 2, netTopY - 30, 8, 130);
-            
-            // Net top rope
-            ctx.strokeStyle = '#FFFFFF';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(netX - netWidth / 2 - 8, netTopY);
-            ctx.lineTo(netX + netWidth / 2 + 8, netTopY);
-            ctx.stroke();
-            
-            // Net bottom rope
-            ctx.beginPath();
-            ctx.moveTo(netX - netWidth / 2 - 8, netBottomY);
-            ctx.lineTo(netX + netWidth / 2 + 8, netBottomY);
-            ctx.stroke();
-            
-            // Net mesh pattern
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.lineWidth = 1.5;
-            
-            // Vertical lines of net
-            for (let i = 0; i <= 12; i++) {
-                const xPos = (netX - netWidth / 2 - 5) + (i * 12);
-                ctx.beginPath();
-                ctx.moveTo(xPos, netTopY);
-                ctx.lineTo(xPos, netBottomY);
-                ctx.stroke();
-            }
-            
-            // Horizontal lines of net (diagonal mesh effect)
-            for (let i = 0; i <= 12; i++) {
-                const yPos = netTopY + (i * 16);
-                ctx.beginPath();
-                ctx.moveTo(netX - netWidth / 2 - 5, yPos);
-                ctx.lineTo(netX + netWidth / 2 + 5, yPos);
-                ctx.stroke();
-            }
-            
-            // Diagonal lines for mesh pattern
-            for (let i = -5; i <= 20; i++) {
-                ctx.beginPath();
-                ctx.moveTo(netX - netWidth / 2 - 5 + i * 6, netTopY);
-                ctx.lineTo(netX - netWidth / 2 - 5 + i * 6 + 120, netBottomY);
-                ctx.stroke();
-                
-                ctx.beginPath();
-                ctx.moveTo(netX - netWidth / 2 - 5 + i * 6, netTopY);
-                ctx.lineTo(netX - netWidth / 2 - 5 + i * 6 - 120, netBottomY);
-                ctx.stroke();
-            }
-
-            // Draw computer paddle (NPC on top side)
-            ctx.fillStyle = '#FF6B6B';
-            ctx.fillRect(computer.x, computer.y, computer.width, computer.height);
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-            ctx.shadowBlur = 5;
-            ctx.strokeStyle = '#C92A2A';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(computer.x, computer.y, computer.width, computer.height);
-            
-            // Add player label on NPC paddle
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = 'bold 10px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('NPC', computer.x + computer.width / 2, computer.y + computer.height / 2 + 3);
-            ctx.shadowColor = 'transparent';
-
-            // Draw player paddle (player on bottom side)
-            ctx.fillStyle = '#4ECDC4';
-            ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-            ctx.shadowBlur = 5;
-            ctx.strokeStyle = '#1A9B99';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
-            
-            // Add player label on player paddle
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = 'bold 10px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('JŪNEBAS', paddle.x + paddle.width / 2, paddle.y + paddle.height / 2 + 3);
-            ctx.shadowColor = 'transparent';
-
-            // Draw ball with gradient and shadow
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
-            ctx.shadowBlur = 8;
-            ctx.shadowOffsetY = 2;
-            
-            const ballGradient = ctx.createRadialGradient(ball.x - 4, ball.y - 4, 2, ball.x, ball.y, ball.radius);
-            ballGradient.addColorStop(0, '#FFE66D');
-            ballGradient.addColorStop(1, '#FFA500');
-            ctx.fillStyle = ballGradient;
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Draw ball stitches (volleyball detail)
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius - 3, 0, Math.PI * 2);
-            ctx.stroke();
-            
-            // Draw curved stitches for volleyball pattern
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y - 3, 5, 0, Math.PI * 2);
-            ctx.stroke();
-            
-            ctx.shadowColor = 'transparent';
-
-            // Draw starting instruction
-            if (!gameStarted) {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = 'bold 36px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Klikšķis lai sāktu', canvas.width / 2, canvas.height / 2 - 20);
-                ctx.font = '20px Arial';
-                ctx.fillText('🖱️ Pārvietojiet peli lai vadītu raketi', canvas.width / 2, canvas.height / 2 + 40);
-            }
-        }
-
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Start the game loop
-        gameLoop();
+        // Initialize game
+        initGame();
     </script>
 </body>
 </html>
